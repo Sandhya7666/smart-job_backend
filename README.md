@@ -1,0 +1,1 @@
+Used child_process module to make python script accessible in node js 
