@@ -79,68 +79,16 @@ router.post("/filter", (req, res) => {
   });
 });
 
-// POST /add-job (protected)
-// router.post("/add-job", authenticateToken, async (req, res) => {
-
-// });
-
-// router.post("/add-job", async (req, res) => {
-//   try {
-//     const recruiter_id = req.user.id; // From JWT middleware
-
-//     const { job_title, company_name, job_description, skills_required, employment_type, work_mode, location, salary_range, experience_level, education_required, number_of_openings, application_deadline, tags, visibility_status, is_active, jd_pdf_path } = req.body;
-
-//     const created_at = new Date().toISOString();
-//     const updated_at = created_at;
-
-//     const query = `
-//       INSERT INTO jobs (
-//         recruiter_id,
-//         job_title,
-//         company_name,
-//         job_description,
-//         skills_required,
-//         employment_type,
-//         work_mode,
-//         location,
-//         salary_range,
-//         experience_level,
-//         education_required,
-//         number_of_openings,
-//         application_deadline,
-//         created_at,
-//         updated_at,
-//         tags,
-//         visibility_status,
-//         is_active,
-//         jd_pdf_path
-//       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-//     `;
-
-//     const values = [recruiter_id, job_title, company_name, job_description, skills_required, employment_type, work_mode, location, salary_range, experience_level, education_required, number_of_openings, application_deadline, created_at, updated_at, tags, visibility_status, is_active, jd_pdf_path];
-
-//     db.run(query, values, function (err) {
-//       if (err) {
-//         console.error("Insert error:", err.message);
-//         return res.status(500).json({ status: false, message: "Database error" });
-//       }
-//       res.status(201).json({ status: true, message: "Job posted successfully", job_id: this.lastID });
-//     });
-//   } catch (error) {
-//     console.error("Server error:", error.message);
-//     res.status(500).json({ status: false, message: "Server error" });
-//   }
-// });
-
 router.post("/post-job", validate(postJobSchema), async (req, res) => {
   try {
-    const { recruiter_id, job_title, company_name, job_description, skills_required, employment_type, work_mode, location, salary_range, experience_level, education_required, number_of_openings, application_deadline, tags, visibility_status, is_active, jd_pdf_path } = req.body;
+    const { recruiter_id, job_title, company_name, job_desc, skills_required, emp_type, work_mode, location, salary_range, exp_level, education_req, no_of_opening, application_deadline, tags, visibility_status, is_active, jd_pdf_path } = req.body;
+    console.log("🚀 ~ router.post ~ recruiter_id:", recruiter_id);
 
     const created_at = new Date().toISOString();
     const updated_at = created_at;
 
     const query = `
-      INSERT INTO jobs (
+      INSERT INTO Posted_Jobs (
         recruiter_id,
         job_title,
         company_name,
@@ -160,16 +108,17 @@ router.post("/post-job", validate(postJobSchema), async (req, res) => {
         visibility_status,
         is_active,
         jd_pdf_path
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
-    const values = [recruiter_id, job_title, company_name, job_description, skills_required, employment_type, work_mode, location, salary_range, experience_level, education_required, number_of_openings, application_deadline, created_at, updated_at, tags, visibility_status, is_active, jd_pdf_path];
+    const values = [recruiter_id, job_title, company_name, job_desc, skills_required, emp_type, work_mode, location, salary_range, exp_level, education_req, no_of_opening, application_deadline, created_at, updated_at, tags, visibility_status, is_active, jd_pdf_path];
 
     db.run(query, values, function (err) {
+      console.log("🚀 ~ err:", err);
       if (err) {
         return errorResponse(res, "Failed to post a job", 500, "auth_insert_error");
       }
-      return successResponse(res, { token: token, user_details: filteredUser }, "Job posted successfully");
+      return successResponse(res, "", "Job posted successfully");
     });
   } catch (error) {
     return errorResponse(res, "Something went wrong", 500, "internal.error");

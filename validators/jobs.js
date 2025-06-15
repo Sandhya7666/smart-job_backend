@@ -1,6 +1,7 @@
 const { object, string, boolean, array } = require("yup");
 
 const postJobSchema = object({
+  recruiter_id: string().required("This field is required"),
   job_title: string().required("This field is required"),
   company_name: string().required("This field is required"),
   job_desc: string().required("This field is required"),

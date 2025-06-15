@@ -1,6 +1,4 @@
 
-
-
 router.post("/upload-resume", upload.single("resume"), async (req, res) => {
   const userId = req.user.id; // assuming you use JWT auth middleware
   const filePath = req.file.path;

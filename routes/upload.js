@@ -2,7 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 const { spawn } = require("child_process");
-const db = require("../db");
+const db = require("../database/db");
 const fs = require("fs");
 
 const router = express.Router();
@@ -19,9 +19,10 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.post("/upload-resume", upload.single("resume"), async (req, res) => {
-  const userId = req.user.id;
+  const userId = req.userid;
   const filePath = req.file.path;
-  const fileName = req.file.filename;
+  // const fileName = req.file.filename;
+  const fileName = "demo.pdf";
 
   try {
     const existing = await db.get("SELECT id FROM resumes WHERE user_id = ?", [userId]);
